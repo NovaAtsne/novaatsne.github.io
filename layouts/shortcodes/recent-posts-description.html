@@ -1,0 +1,88 @@
+<!-- layouts/shortcodes/recent-posts-description.html -->
+{{ $num_posts := .Get 0 | default 5 }}
+{{ $posts := where site.RegularPages "Type" "in" site.Params.mainSections }}
+
+{{ if not $posts }}
+  {{ $posts = where site.RegularPages "Type" "==" "posts" }}
+{{ end }}
+
+{{ if not $posts }}
+  {{ $posts = site.RegularPages }}
+{{ end }}
+
+{{ if $posts }}
+<div class="posts-list">
+  {{ range first $num_posts $posts }}
+  <div class="post-item">
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <small>{{ .Date.Format "2006年1月2日" }}</small>
+    
+    <div class="post-content">
+      {{ if .Description }}
+        <p class="description">{{ .Description }}</p>
+      {{ else }}
+        <p class="summary">{{ .Summary | plainify | truncate 100 }}</p>
+      {{ end }}
+    </div>
+    
+    <a href="{{ .RelPermalink }}" class="read-more">继续阅读</a>
+  </div>
+  {{ end }}
+</div>
+
+<style>
+.posts-list {
+  margin: 2rem 0;
+}
+
+.post-item {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.post-item:last-child {
+  border-bottom: none;
+}
+
+.post-item h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.post-item h3 a {
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.post-item h3 a:hover {
+  color: #3498db;
+}
+
+.post-item small {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.post-content {
+  margin: 1rem 0;
+}
+
+.description, .summary {
+  color: #5d6d7e;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.read-more {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.read-more:hover {
+  text-decoration: underline;
+}
+</style>
+{{ else }}
+<p>暂无文章</p>
+{{ end }}
